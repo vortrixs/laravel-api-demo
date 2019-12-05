@@ -127,14 +127,17 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "The user has been created successfully."
+                    "200": {
+                        "description": "The user has been updated successfully."
                     },
                     "400": {
-                        "description": "Bad request. Indicates invalid properties int he request body."
+                        "description": "Bad request. Indicates invalid properties in the request body."
                     },
                     "404": {
                         "description": "User not found."
+                    },
+                    "409": {
+                        "description": "The email entered is already in use."
                     }
                 }
             }
