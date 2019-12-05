@@ -8,17 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
- * @SWG\Swagger(
- *     basePath="/api/v1",
- *     schemes={"http"},
- *     @OA\Info(
- *         version="1.0.0",
- *         title="Laravel API Demo",
- *         @OA\Contact(
- *             email="hanserikjepsen@hotmail.com"
- *         ),
- *     )
- * )
+ * @OA\Info(version="1.0.0", title="Laravel API Demo", @OA\Contact(email="hanserikjepsen@hotmail.com"))
  */
 class Controller extends BaseController
 {

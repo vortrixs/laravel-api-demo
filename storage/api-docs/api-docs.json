@@ -7,22 +7,158 @@
         },
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
     "paths": {
         "/users": {
             "get": {
                 "tags": [
                     "Users"
                 ],
-                "summary": "Display a listing of all users.",
+                "summary": "Fetch a list of all users.",
                 "operationId": "App\\Http\\Controllers\\UserController::index",
                 "responses": {
                     "200": {
-                        "description": "Users were found and returned"
+                        "description": "Users were found and returned."
                     },
                     "404": {
-                        "description": "No users exist"
+                        "description": "No users exist."
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Store a newly created user in storage.",
+                "operationId": "App\\Http\\Controllers\\UserController::store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The user has been created successfully."
+                    },
+                    "400": {
+                        "description": "Bad request. Indicates missing parameters."
+                    },
+                    "409": {
+                        "description": "The user you are trying to create already exists."
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Fetch the specified user.",
+                "operationId": "App\\Http\\Controllers\\UserController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User found and returned."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update the specified user in storage.",
+                "operationId": "App\\Http\\Controllers\\UserController::update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The user has been created successfully."
+                    },
+                    "400": {
+                        "description": "Bad request. Indicates missing parameters."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Remove the specified user from storage.",
+                "operationId": "App\\Http\\Controllers\\UserController::destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "User succesfully deleted."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "title": "User",
+                "properties": {
+                    "firstname": {
+                        "schema": "User",
+                        "type": "string"
+                    },
+                    "lastname": {
+                        "schema": "User",
+                        "type": "string"
+                    },
+                    "email": {
+                        "schema": "User",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
             }
         }
     }

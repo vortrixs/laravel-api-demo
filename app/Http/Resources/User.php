@@ -4,6 +4,15 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * @OA\Schema(type="object", title="User")
+ * @OA\Property(property="firstname", type="string")
+ * @OA\Property(property="lastname", type="string")
+ * @OA\Property(property="email", type="string")
+ *
+ * Class User
+ * @package App\Http\Resources
+ */
 class User extends ResourceCollection
 {
     /**
