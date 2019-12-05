@@ -11,13 +11,10 @@
 |
 */
 
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::apiResource('users', 'UserController');
-
-Route::get('/debug', "UserController@index");
+Route::get('/debug', "UserController@store");
