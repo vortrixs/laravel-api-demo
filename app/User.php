@@ -2,10 +2,15 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @OA\Schema(type="object", title="User")
+ * @OA\Property(property="firstname", type="string")
+ * @OA\Property(property="lastname", type="string")
+ * @OA\Property(property="email", type="string")
+ */
 class User extends Authenticatable
 {
     use Notifiable;

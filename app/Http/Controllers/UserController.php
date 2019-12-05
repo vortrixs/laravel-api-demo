@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\User;
-use App\Http\Resources\User as UserResource;
+use App\Http\Resources\UserCollection;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Psy\Util\Json;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
+    use ValidatesRequests;
+
     /**
      * @OA\Get(
      *     path="/users",
@@ -22,7 +31,7 @@ class UserController extends Controller
      *
      * Display a listing of all users.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|UserCollection
      */
     public function index()
     {
@@ -33,7 +42,7 @@ class UserController extends Controller
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
 
-        return (new UserResource($users))->response();
+        return new UserCollection($users);
     }
 
     /**
@@ -43,18 +52,44 @@ class UserController extends Controller
      *     summary="Store a newly created user in storage.",
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/User")),
      *     @OA\Response(response=201, description="The user has been created successfully."),
-     *     @OA\Response(response=400, description="Bad request. Indicates missing parameters."),
-     *     @OA\Response(response=409, description="The user you are trying to create already exists."),
+     *     @OA\Response(response=400, description="Bad request. Indicates invalid properties int he request body."),
+     *     @OA\Response(response=409, description="The user with the same email already exists."),
      * )
      *
      * Store a newly created user in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|UserResource
      */
     public function store(Request $request)
     {
-        return new JsonResponse();
+        try
+        {
+            $request->validate([
+                'firstname' => 'string|required',
+                'lastname' => 'string|required',
+                'email' => 'email|required',
+            ]);
+        }
+        catch (ValidationException $e)
+        {
+            return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        try
+        {
+            $request->validate(['email' => 'unique:users,email']);
+        }
+        catch (ValidationException $e)
+        {
+            return new JsonResponse(null, Response::HTTP_CONFLICT);
+        }
+
+        $user = new User($request->json()->all());
+
+        $user->save();
+
+        return new UserResource($user);
     }
 
     /**
@@ -70,41 +105,79 @@ class UserController extends Controller
      * Return the specified user.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|UserResource
      */
     public function show($id)
     {
-        $user = User::all()->find($id);
+        $user = User::find($id);
 
         if (null === $user)
         {
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
 
-        return new JsonResponse($user->toJson());
+        return new UserResource($user);
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/users/{id}",
      *     tags={"Users"},
      *     summary="Update the specified user in storage.",
      *     @OA\Parameter(name="id", in="path", required=true),
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/User")),
-     *     @OA\Response(response=201, description="The user has been created successfully."),
-     *     @OA\Response(response=400, description="Bad request. Indicates missing parameters."),
+     *     @OA\Response(response=200, description="The user has been updated successfully."),
+     *     @OA\Response(response=400, description="Bad request. Indicates invalid properties in the request body."),
      *     @OA\Response(response=404, description="User not found."),
+     *     @OA\Response(response=409, description="The email entered is already in use."),
      * )
      *
      * Update the specified user in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|UserResource
      */
     public function update(Request $request, $id)
     {
-        //
+        try
+        {
+            $request->validate([
+                'firstname' => 'string',
+                'lastname' => 'string',
+                'email' => 'email',
+            ]);
+        }
+        catch (ValidationException $e)
+        {
+            return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        try
+        {
+            $request->validate(['email' => 'unique:users,email']);
+        }
+        catch (ValidationException $e)
+        {
+            return new JsonResponse(null, Response::HTTP_CONFLICT);
+        }
+
+        /** @var User $user */
+        $user = User::find($id);
+
+        if (null === $user)
+        {
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        }
+
+        foreach ($request->json()->all() as $attribute => $value)
+        {
+            $user->setAttribute($attribute, $value);
+        }
+
+        $user->save();
+
+        return new UserResource($user);
     }
 
     /**
@@ -121,10 +194,20 @@ class UserController extends Controller
      * Remove the specified user from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        /** @var User $user */
+        $user = User::find($id);
+
+        if (null === $user)
+        {
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $user->delete();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

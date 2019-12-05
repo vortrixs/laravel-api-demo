@@ -2,21 +2,12 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @OA\Schema(type="object", title="User")
- * @OA\Property(property="firstname", type="string")
- * @OA\Property(property="lastname", type="string")
- * @OA\Property(property="email", type="string")
- *
- * Class User
- * @package App\Http\Resources
- */
-class User extends ResourceCollection
+class UserResource extends JsonResource
 {
     /**
-     * Transform the resource collection into an array.
+     * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array

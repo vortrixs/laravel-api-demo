@@ -50,10 +50,10 @@
                         "description": "The user has been created successfully."
                     },
                     "400": {
-                        "description": "Bad request. Indicates missing parameters."
+                        "description": "Bad request. Indicates invalid properties int he request body."
                     },
                     "409": {
-                        "description": "The user you are trying to create already exists."
+                        "description": "The user with the same email already exists."
                     }
                 }
             }
@@ -81,7 +81,29 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Remove the specified user from storage.",
+                "operationId": "App\\Http\\Controllers\\UserController::destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "User succesfully deleted."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                }
+            },
+            "patch": {
                 "tags": [
                     "Users"
                 ],
@@ -109,29 +131,7 @@
                         "description": "The user has been created successfully."
                     },
                     "400": {
-                        "description": "Bad request. Indicates missing parameters."
-                    },
-                    "404": {
-                        "description": "User not found."
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Remove the specified user from storage.",
-                "operationId": "App\\Http\\Controllers\\UserController::destroy",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "User succesfully deleted."
+                        "description": "Bad request. Indicates invalid properties int he request body."
                     },
                     "404": {
                         "description": "User not found."
