@@ -18,4 +18,4 @@ Simple user management API created using the Laravel 6 framework and documentati
 The [L5 Swagger](https://github.com/DarkaOnLine/L5-Swagger) service provider has been used to seamlessly integrate Swagger-php and Swagger-ui with Laravel.
 
  
-Demo can be found at http://url.tld
+Demo can be found at http://api-demo.he-jepsen.dk/

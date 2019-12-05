@@ -72,7 +72,7 @@
 
                 <div class="links">
                     <a href="{{ url('/api/documentation') }}">Documentation</a>
-                    <a href="https://github.com/vortrixs/laravel-api-demo">Source code</a>
+                    <a target="_blank" href="https://github.com/vortrixs/laravel-api-demo">Source code</a>
                 </div>
             </div>
         </div>

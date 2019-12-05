@@ -52,7 +52,7 @@ class UserController extends Controller
      *     summary="Store a newly created user in storage.",
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/User")),
      *     @OA\Response(response=201, description="The user has been created successfully."),
-     *     @OA\Response(response=400, description="Bad request. Indicates invalid properties int he request body."),
+     *     @OA\Response(response=400, description="Bad request. Indicates invalid properties in the request body."),
      *     @OA\Response(response=409, description="The user with the same email already exists."),
      * )
      *
